@@ -13,6 +13,7 @@ class ErrorDetailsXSSTestCase(BaseStreetArtTestCase):
 
     ENCODE_REGEX = re.compile("\[SHOULDENCODE\](.*?)\[/SHOULDENCODE\]")
     XSS_ENCODE_CHARS = "<>'\"&"
+    XSS_ENCODED_OUTPUT = "&lt;&gt;&#39;&quot;&amp;"
 
     def runTest(self):
         """
@@ -25,8 +26,9 @@ class ErrorDetailsXSSTestCase(BaseStreetArtTestCase):
         }
         response = self.client.get("/error-details/", data=data)
         encoded_data = self.ENCODE_REGEX.findall(response.content)[0]
-        self.assertFalse(
-            any([x in encoded_data for x in self.XSS_ENCODE_CHARS]),
+        self.assertEqual(
+            encoded_data,
+            self.XSS_ENCODED_OUTPUT,
             "XSS encoding characters (%s) were not properly encoded in response (%s)."
             % (self.XSS_ENCODE_CHARS, encoded_data)
         )
