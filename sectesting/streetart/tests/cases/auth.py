@@ -1,19 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from .base import BaseStreetArtTestCase
+from .base import BaseViewVerbTestCase
 
 
-class AuthenticationEnforcementTestCase(BaseStreetArtTestCase):
+class AuthenticationEnforcementTestCase(BaseViewVerbTestCase):
     """
     This is a test case for testing whether or not authentication is properly enforced on a
     view.
     """
-
-    def __init__(self, view=None, verb=None, *args, **kwargs):
-        self.view = view
-        self.verb = verb
-        super(AuthenticationEnforcementTestCase, self).__init__(*args, **kwargs)
 
     def runTest(self):
         """

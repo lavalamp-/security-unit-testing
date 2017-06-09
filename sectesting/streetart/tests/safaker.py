@@ -20,7 +20,7 @@ class SaFaker(object):
     # Static Methods
 
     @staticmethod
-    def create_posts_for_user(to_populate=None, count=20):
+    def create_posts_for_user(to_populate=None, count=100):
         """
         Create a number of StreetArtPost objects and associate them with the given
         user.

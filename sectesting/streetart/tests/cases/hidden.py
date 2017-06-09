@@ -1,18 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from .base import BaseStreetArtTestCase
+from .base import BaseViewTestCase
 
 
-class RegularUnknownMethodsTestCase(BaseStreetArtTestCase):
+class RegularUnknownMethodsTestCase(BaseViewTestCase):
     """
     This is a test case for testing whether or not a view returns the expected HTTP verbs through
     an OPTIONS request from a regular user.
     """
-
-    def __init__(self, view, *args, **kwargs):
-        self.view = view
-        super(RegularUnknownMethodsTestCase, self).__init__(*args, **kwargs)
 
     def runTest(self):
         """

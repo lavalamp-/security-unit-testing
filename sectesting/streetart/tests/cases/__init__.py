@@ -10,6 +10,11 @@ from .dos import (
     RegularViewRequestIsSuccessfulTestCase,
 )
 
+from .headers import (
+    HeaderKeyExistsTestCase,
+    HeaderValueAccurateTestCase,
+)
+
 from .hidden import (
     RegularUnknownMethodsTestCase,
 )

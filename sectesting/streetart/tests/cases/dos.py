@@ -1,20 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from .base import BaseStreetArtTestCase
-from ..registry import TestRequestorRegistry
+from .base import BaseViewVerbTestCase
 
 
-class RegularViewRequestIsSuccessfulTestCase(BaseStreetArtTestCase):
+class RegularViewRequestIsSuccessfulTestCase(BaseViewVerbTestCase):
     """
     This is a test case for testing whether or not a view returns a HTTP response indicating
     that the request was successful for a regular user.
     """
-
-    def __init__(self, view=None, verb=None, *args, **kwargs):
-        self.view = view
-        self.verb = verb
-        super(RegularViewRequestIsSuccessfulTestCase, self).__init__(*args, **kwargs)
 
     def runTest(self):
         """
@@ -30,16 +24,11 @@ class RegularViewRequestIsSuccessfulTestCase(BaseStreetArtTestCase):
         )
 
 
-class AdminViewRequestIsSuccessfulTestCase(BaseStreetArtTestCase):
+class AdminViewRequestIsSuccessfulTestCase(BaseViewVerbTestCase):
     """
     This is a test case for testing whether or not a view returns a HTTP response indicating
     that the request was successful for an admin user.
     """
-
-    def __init__(self, view=None, verb=None, *args, **kwargs):
-        self.view = view
-        self.verb = verb
-        super(AdminViewRequestIsSuccessfulTestCase, self).__init__(*args, **kwargs)
 
     def runTest(self):
         """

@@ -1,19 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from .base import BaseStreetArtTestCase
+from .base import BaseViewTestCase
 from ..registry import TestRequestorRegistry
 
 
-class ViewHasRequestorTestCase(BaseStreetArtTestCase):
+class ViewHasRequestorTestCase(BaseViewTestCase):
     """
     This is a test case for testing whether or not a view has a corresponding requestor
     mapped to it.
     """
-
-    def __init__(self, view, *args, **kwargs):
-        self.view = view
-        super(ViewHasRequestorTestCase, self).__init__(*args, **kwargs)
 
     def runTest(self):
         """

@@ -7,7 +7,8 @@ from django.conf import settings
 from .registry import TestRequestorRegistry
 from .helper import UrlPatternHelper
 from .cases import ViewHasRequestorTestCase, RegularViewRequestIsSuccessfulTestCase, \
-    AdminViewRequestIsSuccessfulTestCase, RegularUnknownMethodsTestCase, AuthenticationEnforcementTestCase
+    AdminViewRequestIsSuccessfulTestCase, RegularUnknownMethodsTestCase, AuthenticationEnforcementTestCase, \
+    HeaderKeyExistsTestCase, HeaderValueAccurateTestCase
 from .safaker import SaFaker
 
 
@@ -81,10 +82,8 @@ class StreetArtTestRunner(DiscoverRunner):
         on a given view.
         """
         to_return = []
-        registry = TestRequestorRegistry.instance()
         for _, _, callback in self.url_patterns:
-            view = self.__get_view_from_callback(callback)
-            requestor = registry.get_requestor_for_view(view)
+            view, requestor = self.__get_view_and_requestor_from_callback(callback)
             if not requestor.requires_auth:
                 continue
             for supported_verb in requestor.supported_verbs:
@@ -103,10 +102,8 @@ class StreetArtTestRunner(DiscoverRunner):
         return successful HTTP status codes.
         """
         to_return = []
-        registry = TestRequestorRegistry.instance()
         for _, _, callback in self.url_patterns:
-            view = self.__get_view_from_callback(callback)
-            requestor = registry.get_requestor_for_view(view)
+            view, requestor = self.__get_view_and_requestor_from_callback(callback)
             for supported_verb in requestor.supported_verbs:
 
                 class AnonTestCase1(RegularViewRequestIsSuccessfulTestCase):
@@ -139,7 +136,33 @@ class StreetArtTestRunner(DiscoverRunner):
             to_return.extend(self.__get_unknown_methods_tests())
         if settings.TEST_FOR_AUTHENTICATION_ENFORCEMENT:
             to_return.extend(self.__get_authentication_enforcement_tests())
+        if settings.TEST_FOR_RESPONSE_HEADERS:
+            to_return.extend(self.__get_response_header_tests())
         return to_return
+
+    def __get_response_header_tests(self):
+        """
+        Get a list of test cases that will test the views associated with the Street Art project to ensure
+        that the expected response headers are found in all responses.
+        :return: A list of test cases that will test the views associated with the Street Art project to ensure
+        that the expected response headers are found in all responses.
+        """
+        to_return = []
+        for _, _, callback in self.url_patterns:
+            view, requestor = self.__get_view_and_requestor_from_callback(callback)
+            for k, v in settings.EXPECTED_RESPONSE_HEADERS["included"].iteritems():
+                for supported_verb in requestor.supported_verbs:
+
+                    class AnonTestCase1(HeaderKeyExistsTestCase):
+                        pass
+
+                    class AnonTestCase2(HeaderValueAccurateTestCase):
+                        pass
+
+                    to_return.append(AnonTestCase1(view=view, verb=supported_verb, header_key=k))
+                    to_return.append(AnonTestCase2(view=view, verb=supported_verb, header_key=k, header_value=v))
+        return to_return
+
 
     def __get_requestor_class_tests(self):
         """
@@ -184,6 +207,19 @@ class StreetArtTestRunner(DiscoverRunner):
             return callback.view_class
         else:
             return callback
+
+    def __get_view_and_requestor_from_callback(self, callback):
+        """
+        Get a tuple containing (1) the view and (2) the requestor associated with the given URL
+        pattern callback.
+        :param callback: The URL pattern callback to process.
+        :return: A tuple containing (1) the view and (2) the requestor associated with the given URL
+        pattern callback.
+        """
+        registry = TestRequestorRegistry.instance()
+        view = self.__get_view_from_callback(callback)
+        requestor = registry.get_requestor_for_view(view)
+        return view, requestor
 
     def __populate_database(self):
         """
