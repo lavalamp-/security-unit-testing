@@ -7,7 +7,7 @@ from django.conf import settings
 from .registry import TestRequestorRegistry
 from .helper import UrlPatternHelper
 from .cases import ViewHasRequestorTestCase, RegularViewRequestIsSuccessfulTestCase, \
-    AdminViewRequestIsSuccessfulTestCase, RegularUnknownMethodsTestCase
+    AdminViewRequestIsSuccessfulTestCase, RegularUnknownMethodsTestCase, AuthenticationEnforcementTestCase
 from .safaker import SaFaker
 
 
@@ -73,6 +73,26 @@ class StreetArtTestRunner(DiscoverRunner):
 
     # Private Methods
 
+    def __get_authentication_enforcement_tests(self):
+        """
+        Get a list of test cases that will test whether or not authentication is correctly enforced
+        on a given view.
+        :return: A list of test cases that will test whether or not authentication is correctly enforced
+        on a given view.
+        """
+        to_return = []
+        registry = TestRequestorRegistry.instance()
+        for _, _, callback in self.url_patterns:
+            view = self.__get_view_from_callback(callback)
+            requestor = registry.get_requestor_for_view(view)
+            if not requestor.requires_auth:
+                continue
+            class AnonTestCase(AuthenticationEnforcementTestCase):
+                pass
+            for supported_verb in requestor.supported_verbs:
+                to_return.append(AnonTestCase(view=view, verb=supported_verb))
+        return to_return
+
     def __get_dos_class_tests(self):
         """
         Get a list of test cases that will test to ensure that all of the configured URL routes
@@ -112,6 +132,8 @@ class StreetArtTestRunner(DiscoverRunner):
             to_return.extend(self.__get_dos_class_tests())
         if settings.TEST_FOR_UNKNOWN_METHODS:
             to_return.extend(self.__get_unknown_methods_tests())
+        if settings.TEST_FOR_AUTHENTICATION_ENFORCEMENT:
+            to_return.extend(self.__get_authentication_enforcement_tests())
         return to_return
 
     def __get_requestor_class_tests(self):

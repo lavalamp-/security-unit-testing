@@ -65,74 +65,80 @@ class BaseRequestor(object):
         """
         return None
 
-    def send_delete(self, user_string="user_1"):
+    def send_delete(self, user_string="user_1", do_auth=True):
         """
         Send a DELETE request to the configured URL endpoint on behalf of the given user.
         :param user_string: The user to send the request as.
+        :param do_auth: Whether or not to log the user in if the view requires authentication.
         :return: The HTTP response.
         """
         client = Client()
-        if self.requires_auth:
+        if self.requires_auth and do_auth:
             user = SaFaker.get_user(user_string)
             client.force_login(user)
         return client.delete(self.get_url_path(user=user_string), data=self.get_delete_data(user=user_string))
 
-    def send_get(self, user_string="user_1"):
+    def send_get(self, user_string="user_1", do_auth=True):
         """
         Send a GET request to the configured URL endpoint on behalf of the given user.
         :param user_string: The user to send the request as.
+        :param do_auth: Whether or not to log the user in if the view requires authentication.
         :return: The HTTP response.
         """
         client = Client()
-        if self.requires_auth:
+        if self.requires_auth and do_auth:
             user = SaFaker.get_user(user_string)
             client.force_login(user)
         return client.get(self.get_url_path(user=user_string), data=self.get_get_data(user=user_string))
 
-    def send_head(self, user_string="user_1"):
+    def send_head(self, user_string="user_1", do_auth=True):
         """
         Send a HEAD request to the configured URL endpoint on behalf of the given user.
         :param user_string: The user to send the request as.
+        :param do_auth: Whether or not to log the user in if the view requires authentication.
         :return: The HTTP response.
         """
         client = Client()
-        if self.requires_auth:
+        if self.requires_auth and do_auth:
             user = SaFaker.get_user(user_string)
             client.force_login(user)
         return client.head(self.get_url_path(user=user_string))
 
-    def send_options(self, user_string="user_1"):
+    def send_options(self, user_string="user_1", do_auth=True):
         """
         Send an OPTIONS request to the configured URL endpoint on behalf of the given user.
         :param user_string: The user to send the request as.
+        :param do_auth: Whether or not to log the user in if the view requires authentication.
         :return: The HTTP response.
         """
         client = Client()
-        if self.requires_auth:
+        if self.requires_auth and do_auth:
             user = SaFaker.get_user(user_string)
             client.force_login(user)
         return client.options(self.get_url_path(user=user_string))
 
-    def send_post(self, user_string="user_1"):
+    def send_post(self, user_string="user_1", do_auth=True):
         """
         Send a POST request to the configured URL endpoint on behalf of the given user.
         :param user_string: The user to send the request as.
+        :param do_auth: Whether or not to log the user in if the view requires authentication.
         :return: The HTTP response.
         """
         client = Client()
-        if self.requires_auth:
+        if self.requires_auth and do_auth:
             user = SaFaker.get_user(user_string)
             client.force_login(user)
         return client.post(self.get_url_path(user=user_string), data=self.get_post_data(user=user_string))
 
-    def send_put(self, user_string="user_1"):
+    def send_put(self, user_string="user_1", do_auth=True):
         """
         Send a PUT request to the configured URL endpoint on behalf of the given user.
         :param user_string: The user to send the request as.
+        :param do_auth: Whether or not to log the user in if the view requires authentication.
         :return: The HTTP response.
         """
         client = Client()
-        if self.requires_auth:
+        if self.requires_auth and do_auth:
             user = SaFaker.get_user(user_string)
             client.force_login(user)
         return client.put(self.get_url_path(user=user_string), data=self.get_put_data(user=user_string))

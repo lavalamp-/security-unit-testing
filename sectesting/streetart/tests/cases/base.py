@@ -23,10 +23,21 @@ class BaseStreetArtTestCase(TestCase):
 
     # Protected Methods
 
+    def _assert_response_permission_denied(self, response, message):
+        """
+        Assert that the contents of the given response indicate that the request did
+        not have sufficient permissions.
+        :param response: The response to check.
+        :param message: The message to print upon failure.
+        :return: None
+        """
+        self.assertEqual(response.status_code, 403, msg=message)
+
     def _assert_response_successful(self, response, message):
         """
         Assert that the contents of the given response indicate a successful response.
         :param response: The response to check.
+        :param message: The message to print upon failure.
         :return: None
         """
         self.assertIn(
