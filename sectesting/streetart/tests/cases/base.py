@@ -55,6 +55,21 @@ class BaseStreetArtTestCase(TestCase):
         response_header_value = response._headers[header_key.lower()][1]
         self.assertEqual(response_header_value, header_value, msg=message)
 
+    def _assert_response_not_has_header_key(self, response=None, header_key=None, message=None):
+        """
+        Assert that the given response does not contain a header corresponding to the given header
+        key.
+        :param response: The response to check.
+        :param header_key: The header key to check.
+        :param message: The message to print upon failure.
+        :return: None
+        """
+        self.assertNotIn(
+            header_key.lower(),
+            [x.lower() for x in response._headers.keys()],
+            msg=message,
+        )
+
     def _assert_response_permission_denied(self, response, message):
         """
         Assert that the contents of the given response indicate that the request did

@@ -8,7 +8,7 @@ from .registry import TestRequestorRegistry
 from .helper import UrlPatternHelper
 from .cases import ViewHasRequestorTestCase, RegularViewRequestIsSuccessfulTestCase, \
     AdminViewRequestIsSuccessfulTestCase, RegularUnknownMethodsTestCase, AuthenticationEnforcementTestCase, \
-    HeaderKeyExistsTestCase, HeaderValueAccurateTestCase
+    HeaderKeyExistsTestCase, HeaderValueAccurateTestCase, HeaderKeyNotExistsTestCase
 from .safaker import SaFaker
 
 
@@ -161,6 +161,13 @@ class StreetArtTestRunner(DiscoverRunner):
 
                     to_return.append(AnonTestCase1(view=view, verb=supported_verb, header_key=k))
                     to_return.append(AnonTestCase2(view=view, verb=supported_verb, header_key=k, header_value=v))
+            for excluded_header in settings.EXPECTED_RESPONSE_HEADERS["excluded"]:
+                for supported_verb in requestor.supported_verbs:
+
+                    class AnonTestCase3(HeaderKeyNotExistsTestCase):
+                        pass
+
+                    to_return.append(AnonTestCase3(view=view, verb=supported_verb, header_key=excluded_header))
         return to_return
 
 

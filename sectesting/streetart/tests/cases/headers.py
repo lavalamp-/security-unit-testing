@@ -56,3 +56,29 @@ class HeaderValueAccurateTestCase(BaseViewVerbTestCase):
                     "Headers were %s."
             % (self.view, self.verb, self.header_key, self.header_value, response._headers)
         )
+
+
+class HeaderKeyNotExistsTestCase(BaseViewVerbTestCase):
+    """
+    This is a test case for testing that a header key is not contained within the responses of all
+    the views within the Street Art project.
+    """
+
+    def __init__(self, header_key=None, *args, **kwargs):
+        self.header_key = header_key
+        super(HeaderKeyNotExistsTestCase, self).__init__(*args, **kwargs)
+
+    def runTest(self):
+        """
+        Tests that the HTTP response received from the view does not contain a header corresponding to
+        self.header_key.
+        :return: None
+        """
+        requestor = self._get_requestor_for_view(self.view)
+        response = requestor.send_request_by_verb(self.verb, user_string="user_1")
+        self._assert_response_not_has_header_key(
+            response=response,
+            header_key=self.header_key,
+            message="Response from view %s with verb %s contained header key of %s. Keys were %s."
+                    % (self.view, self.verb, self.header_key, response._headers.keys())
+        )

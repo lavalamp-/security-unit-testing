@@ -18,3 +18,18 @@ class SecurityHeadersMiddleware(object):
         response["X-XSS-Protection"] = "1; mode=block"
         response["X-Permitted-Cross-Domain-Policies"] = "none"
         return response
+
+
+class BadHeadersMiddleware(object):
+    """
+    This is a middleware class for adding some SUPER SENSITIVE stuff to HTTP response headers.
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        response["X-Supah-Secret"] = "THIS IS TOTALLY MY PASSWORD"
+        response["X-Supah-Dupah-Secret"] = "AND THIS IS A PRIVATE KEY LOLZ"
+        return response

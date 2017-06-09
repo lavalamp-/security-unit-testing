@@ -12,6 +12,7 @@ from .dos import (
 
 from .headers import (
     HeaderKeyExistsTestCase,
+    HeaderKeyNotExistsTestCase,
     HeaderValueAccurateTestCase,
 )
 
