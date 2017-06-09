@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}- View Posts{% endblock %}
+
+{% block header %}
+View Posts
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <a href="{% url 'new-post' %}">
+                <button>Create New Post</button>
+            </a>
+        </div>
+    </div>
+    {% if is_paginated %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="pagination">
+                    <span class="page-links">
+                        {% if page_obj.has_previous %}
+                            <a href="/?page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
+                        <span class="page-current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                        </span>
+                        {% if page_obj.has_next %}
+                            <a href="/?page={{ page_obj.next_page_number }}">next</a>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% for post in object_list %}
+        {% include 'components/post_summary.html' with object=post %}
+    {% endfor %}
+    {% if is_paginated %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="pagination">
+                    <span class="page-links">
+                        {% if page_obj.has_previous %}
+                            <a href="/?page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
+                        <span class="page-current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                        </span>
+                        {% if page_obj.has_next %}
+                            <a href="/?page={{ page_obj.next_page_number }}">next</a>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

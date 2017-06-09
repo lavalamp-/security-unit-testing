@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}- New Post{% endblock %}
+
+{% block header %}
+Create New Post
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <form enctype="multipart/form-data" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Create Post"/>
+            </form>
+        </div>
+    </div>
+{% endblock %}

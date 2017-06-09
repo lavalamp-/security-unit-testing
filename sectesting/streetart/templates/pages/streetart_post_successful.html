@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}- Post Successful{% endblock %}
+
+{% block header %}
+Your Post Was Successfully Submitted
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            The contents of your post are displayed below.
+        </div>
+    </div>
+    {% include 'components/post_summary.html' %}
+{% endblock %}

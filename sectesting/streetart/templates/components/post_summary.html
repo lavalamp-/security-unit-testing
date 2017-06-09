@@ -1,0 +1,37 @@
+<div class="post-summary">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{{ object.s3_url }}" alt="{{object.title}}">
+        </div>
+        <div class="col-md-8">
+            <h2>
+                {{ object.title }}
+            </h2>
+            <p>
+                {{ object.description }}
+            </p>
+
+            <p>
+                {% if object.has_coordinates %}
+                Located at {{ object.coordinates_string }}
+                {% else %}
+                No location provided
+                {% endif %}
+            </p>
+            <div class="post-options">
+                <a href="{% url 'view-post' pk=object.uuid %}">
+                    <button>View Details</button>
+                </a>
+                {% if object.user == request.user or request.user.is_superuser %}
+                <a href="{% url 'edit-post' pk=object.uuid %}">
+                    <button>Edit Details</button>
+                </a>
+                <form action="{% url 'delete-post' pk=object.uuid %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Delete">
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

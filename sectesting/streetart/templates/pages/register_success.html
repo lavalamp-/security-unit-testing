@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}- Registration Successful{% endblock %}
+
+{% block header %}
+Registration Successful!
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <p>You have successfully registered! Please <a href="{% url 'login' %}">log in</a> to add posts associated with your new account!</p>
+        </div>
+    </div>
+{% endblock %}
