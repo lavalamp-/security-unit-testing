@@ -5,6 +5,10 @@ from .auth import (
     AuthenticationEnforcementTestCase,
 )
 
+from .csrf import (
+    CsrfEnforcementTestCase,
+)
+
 from .dos import (
     AdminViewRequestIsSuccessfulTestCase,
     RegularViewRequestIsSuccessfulTestCase,

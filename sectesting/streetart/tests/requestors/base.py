@@ -81,16 +81,17 @@ class BaseRequestor(object):
         """
         return None
 
-    def send_delete(self, user_string="user_1", do_auth=True, *args, **kwargs):
+    def send_delete(self, user_string="user_1", do_auth=True, enforce_csrf_checks=False, *args, **kwargs):
         """
         Send a DELETE request to the configured URL endpoint on behalf of the given user.
         :param user_string: The user to send the request as.
         :param do_auth: Whether or not to log the user in if the view requires authentication.
+        :param enforce_csrf_checks: Whether or not to enforce CSRF checks in the HTTP client.
         :param args: Positional arguments for client.delete.
         :param kwargs: Keyword arguments for client.delete.
         :return: The HTTP response.
         """
-        client = Client()
+        client = Client(enforce_csrf_checks=enforce_csrf_checks)
         if self.requires_auth and do_auth:
             user = SaFaker.get_user(user_string)
             client.force_login(user)
@@ -101,16 +102,17 @@ class BaseRequestor(object):
             **kwargs
         )
 
-    def send_get(self, user_string="user_1", do_auth=True, *args, **kwargs):
+    def send_get(self, user_string="user_1", do_auth=True, enforce_csrf_checks=False, *args, **kwargs):
         """
         Send a GET request to the configured URL endpoint on behalf of the given user.
         :param user_string: The user to send the request as.
         :param do_auth: Whether or not to log the user in if the view requires authentication.
+        :param enforce_csrf_checks: Whether or not to enforce CSRF checks in the HTTP client.
         :param args: Positional arguments for client.get.
         :param kwargs: Keyword arguments for client.get.
         :return: The HTTP response.
         """
-        client = Client()
+        client = Client(enforce_csrf_checks=enforce_csrf_checks)
         if self.requires_auth and do_auth:
             user = SaFaker.get_user(user_string)
             client.force_login(user)
@@ -121,16 +123,17 @@ class BaseRequestor(object):
             **kwargs
         )
 
-    def send_head(self, user_string="user_1", do_auth=True, *args, **kwargs):
+    def send_head(self, user_string="user_1", do_auth=True, enforce_csrf_checks=False, *args, **kwargs):
         """
         Send a HEAD request to the configured URL endpoint on behalf of the given user.
         :param user_string: The user to send the request as.
         :param do_auth: Whether or not to log the user in if the view requires authentication.
+        :param enforce_csrf_checks: Whether or not to enforce CSRF checks in the HTTP client.
         :param args: Positional arguments for client.head.
         :param kwargs: Keyword arguments for client.head.
         :return: The HTTP response.
         """
-        client = Client()
+        client = Client(enforce_csrf_checks=enforce_csrf_checks)
         if self.requires_auth and do_auth:
             user = SaFaker.get_user(user_string)
             client.force_login(user)
@@ -140,16 +143,17 @@ class BaseRequestor(object):
             **kwargs
         )
 
-    def send_options(self, user_string="user_1", do_auth=True, *args, **kwargs):
+    def send_options(self, user_string="user_1", do_auth=True, enforce_csrf_checks=False, *args, **kwargs):
         """
         Send an OPTIONS request to the configured URL endpoint on behalf of the given user.
         :param user_string: The user to send the request as.
         :param do_auth: Whether or not to log the user in if the view requires authentication.
+        :param enforce_csrf_checks: Whether or not to enforce CSRF checks in the HTTP client.
         :param args: Positional arguments for client.options.
         :param kwargs: Keyword arguments for client.options.
         :return: The HTTP response.
         """
-        client = Client()
+        client = Client(enforce_csrf_checks=enforce_csrf_checks)
         if self.requires_auth and do_auth:
             user = SaFaker.get_user(user_string)
             client.force_login(user)
@@ -159,16 +163,17 @@ class BaseRequestor(object):
             **kwargs
         )
 
-    def send_patch(self, user_string="user_1", do_auth=True, *args, **kwargs):
+    def send_patch(self, user_string="user_1", do_auth=True, enforce_csrf_checks=False, *args, **kwargs):
         """
         Send a PATCH request to the configured URL endpoint on behalf of the given user.
         :param user_string: The user to send the request as.
         :param do_auth: Whether or not to log the user in if the view requires authentication.
+        :param enforce_csrf_checks: Whether or not to enforce CSRF checks in the HTTP client.
         :param args: Positional arguments for client.patch.
         :param kwargs: Keyword arguments for client.patch.
         :return: The HTTP response.
         """
-        client = Client()
+        client = Client(enforce_csrf_checks=enforce_csrf_checks)
         if self.requires_auth and do_auth:
             user = SaFaker.get_user(user_string)
             client.force_login(user)
@@ -179,16 +184,17 @@ class BaseRequestor(object):
             **kwargs
         )
 
-    def send_post(self, user_string="user_1", do_auth=True, *args, **kwargs):
+    def send_post(self, user_string="user_1", do_auth=True, enforce_csrf_checks=False, *args, **kwargs):
         """
         Send a POST request to the configured URL endpoint on behalf of the given user.
         :param user_string: The user to send the request as.
         :param do_auth: Whether or not to log the user in if the view requires authentication.
+        :param enforce_csrf_checks: Whether or not to enforce CSRF checks in the HTTP client.
         :param args: Positional arguments for client.post.
         :param kwargs: Keyword arguments for client.post.
         :return: The HTTP response.
         """
-        client = Client()
+        client = Client(enforce_csrf_checks=enforce_csrf_checks)
         if self.requires_auth and do_auth:
             user = SaFaker.get_user(user_string)
             client.force_login(user)
@@ -199,16 +205,17 @@ class BaseRequestor(object):
             **kwargs
         )
 
-    def send_put(self, user_string="user_1", do_auth=True, *args, **kwargs):
+    def send_put(self, user_string="user_1", do_auth=True, enforce_csrf_checks=False, *args, **kwargs):
         """
         Send a PUT request to the configured URL endpoint on behalf of the given user.
         :param user_string: The user to send the request as.
         :param do_auth: Whether or not to log the user in if the view requires authentication.
+        :param enforce_csrf_checks: Whether or not to enforce CSRF checks in the HTTP client.
         :param args: Positional arguments for client.put.
         :param kwargs: Keyword arguments for client.put.
         :return: The HTTP response.
         """
-        client = Client()
+        client = Client(enforce_csrf_checks=enforce_csrf_checks)
         if self.requires_auth and do_auth:
             user = SaFaker.get_user(user_string)
             client.force_login(user)
@@ -250,16 +257,17 @@ class BaseRequestor(object):
                 % (verb.upper(),)
             )
 
-    def send_trace(self, user_string="user_1", do_auth=True, *args, **kwargs):
+    def send_trace(self, user_string="user_1", do_auth=True, enforce_csrf_checks=False, *args, **kwargs):
         """
         Send a TRACE request to the configured URL endpoint on behalf of the given user.
         :param user_string: The user to send the request as.
         :param do_auth: Whether or not to log the user in if the view requires authentication.
+        :param enforce_csrf_checks: Whether or not to enforce CSRF checks in the HTTP client.
         :param args: Positional arguments for client.trace.
         :param kwargs: Keyword arguments for client.trace.
         :return: The HTTP response.
         """
-        client = Client()
+        client = Client(enforce_csrf_checks=enforce_csrf_checks)
         if self.requires_auth and do_auth:
             user = SaFaker.get_user(user_string)
             client.force_login(user)

@@ -9,7 +9,7 @@ from .helper import UrlPatternHelper
 from .cases import ViewHasRequestorTestCase, RegularViewRequestIsSuccessfulTestCase, \
     AdminViewRequestIsSuccessfulTestCase, RegularUnknownMethodsTestCase, AuthenticationEnforcementTestCase, \
     HeaderKeyExistsTestCase, HeaderValueAccurateTestCase, HeaderKeyNotExistsTestCase, AdminUnknownMethodsTestCase, \
-    RegularVerbNotSupportedTestCase, AdminVerbNotSupportedTestCase
+    RegularVerbNotSupportedTestCase, AdminVerbNotSupportedTestCase, CsrfEnforcementTestCase
 from .safaker import SaFaker
 
 
@@ -40,6 +40,13 @@ class StreetArtTestRunner(DiscoverRunner):
         "DELETE",
         "OPTIONS",
         "TRACE",
+        "PATCH",
+    ]
+
+    CSRF_VERBS = [
+        "POST",
+        "PUT",
+        "DELETE",
         "PATCH",
     ]
 
@@ -106,6 +113,27 @@ class StreetArtTestRunner(DiscoverRunner):
                 to_return.append(AnonTestCase(view=view, verb=supported_verb))
         return to_return
 
+    def __get_csrf_enforcement_tests(self):
+        """
+        Get a list of test cases that check to make sure that CSRF checks are being correctly
+        enforced.
+        :return: A list of test cases that check to make sure that CSRF checks are being correctly
+        enforced.
+        """
+        to_return = []
+        csrf_verbs = [x.lower() for x in self.CSRF_VERBS]
+        for _, _, callback in self.url_patterns:
+            view, requestor = self.__get_view_and_requestor_from_callback(callback)
+            supported_verbs = [x.lower() for x in requestor.supported_verbs]
+            supported_csrf_verbs = filter(lambda x: x in csrf_verbs, supported_verbs)
+            for supported_csrf_verb in supported_csrf_verbs:
+
+                class AnonTestCase1(CsrfEnforcementTestCase):
+                    pass
+
+                to_return.append(AnonTestCase1(view=view, verb=supported_csrf_verb))
+        return to_return
+
     def __get_dos_class_tests(self):
         """
         Get a list of test cases that will test to ensure that all of the configured URL routes
@@ -152,6 +180,8 @@ class StreetArtTestRunner(DiscoverRunner):
             to_return.extend(self.__get_response_header_tests())
         if settings.TEST_FOR_OPTIONS_ACCURACY:
             to_return.extend(self.__get_options_accuracy_tests())
+        if settings.TEST_FOR_CSRF_ENFORCEMENT:
+            to_return.extend(self.__get_csrf_enforcement_tests())
         return to_return
 
     def __get_options_accuracy_tests(self):

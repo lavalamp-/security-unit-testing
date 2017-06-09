@@ -5,8 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
 from uuid import uuid4
 from django.conf import settings
-from django.http import HttpResponseNotAllowed, HttpResponse
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 from ...models import StreetArtPost
 from ...forms import NewStreetArtPostForm, EditStreetArtPostForm
@@ -45,6 +46,7 @@ class MyPostsListView(LoginRequiredMixin, BaseListView):
         return self.request.user.posts.all()
 
 
+@method_decorator(csrf_exempt, name="dispatch")
 @requested_by("streetart.tests.requestors.pages.CreatePostViewRequestor")
 class CreatePostView(BaseFormView):
     """
@@ -116,6 +118,7 @@ class PostDetailView(BaseDetailView):
     model = StreetArtPost
 
 
+@method_decorator(csrf_exempt, name="dispatch")
 @requested_by("streetart.tests.requestors.pages.EditPostViewRequestor")
 class EditPostView(LoginRequiredMixin, BaseUpdateView):
     """
@@ -127,6 +130,7 @@ class EditPostView(LoginRequiredMixin, BaseUpdateView):
     model = StreetArtPost
 
 
+@method_decorator(csrf_exempt, name="dispatch")
 @requested_by("streetart.tests.requestors.pages.DeletePostViewRequestor")
 class DeletePostView(LoginRequiredMixin, BaseDeleteView):
     """
