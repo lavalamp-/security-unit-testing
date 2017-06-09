@@ -6,6 +6,10 @@ from .auth import (
     CreateUserViewRequestor,
 )
 
+from .error import (
+    ErrorDetailsViewRequestor,
+)
+
 from .post import (
     CreatePostViewRequestor,
     EditPostViewRequestor,

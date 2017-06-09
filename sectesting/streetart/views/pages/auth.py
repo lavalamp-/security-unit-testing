@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from django.shortcuts import render
-
 from .base import BaseFormView, BaseTemplateView
 from ...forms import NewUserForm
 from ...tests import requested_by

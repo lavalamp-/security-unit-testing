@@ -42,4 +42,8 @@ urlpatterns = [
     url(r"^register/?$", views.CreateUserView.as_view(), name="register"),
     url(r"^register-success/?$", views.CreateUserSuccessView.as_view(), name="register-success"),
 
+    # Error Handling
+
+    url(r"^error-details/?$", views.ErrorDetailsView.as_view(), name="error-info"),
+
 ]

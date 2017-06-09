@@ -27,6 +27,8 @@ from .hidden import (
     RegularVerbNotSupportedTestCase,
 )
 
+from .pages import *
+
 from .requestor import (
     ViewHasRequestorTestCase,
 )

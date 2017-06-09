@@ -62,22 +62,22 @@ class StreetArtTestRunner(DiscoverRunner):
 
     # Public Methods
 
-    def build_suite(self, test_labels=None, extra_tests=None, **kwargs):
-        """
-        Build the test suite to run for this discover runner.
-        :param test_labels: A list of strings describing the tests to be run.
-        :param extra_tests: A list of extra TestCase instances to add to the suite that is
-        executed by the test runner.
-        :param kwargs: Additional keyword arguments.
-        :return: The test suite.
-        """
-        extra_tests = extra_tests if extra_tests is not None else []
-        extra_tests.extend(self.__get_generated_test_cases())
-        return super(StreetArtTestRunner, self).build_suite(
-            test_labels=test_labels,
-            extra_tests=extra_tests,
-            **kwargs
-        )
+    # def build_suite(self, test_labels=None, extra_tests=None, **kwargs):
+    #     """
+    #     Build the test suite to run for this discover runner.
+    #     :param test_labels: A list of strings describing the tests to be run.
+    #     :param extra_tests: A list of extra TestCase instances to add to the suite that is
+    #     executed by the test runner.
+    #     :param kwargs: Additional keyword arguments.
+    #     :return: The test suite.
+    #     """
+    #     extra_tests = extra_tests if extra_tests is not None else []
+    #     extra_tests.extend(self.__get_generated_test_cases())
+    #     return super(StreetArtTestRunner, self).build_suite(
+    #         test_labels=test_labels,
+    #         extra_tests=extra_tests,
+    #         **kwargs
+    #     )
 
     def run_suite(self, suite, **kwargs):
         """

@@ -6,6 +6,10 @@ from .auth import (
     CreateUserView,
 )
 
+from .error import (
+    ErrorDetailsView,
+)
+
 from .post import (
     CreatePostView,
     DeletePostView,
