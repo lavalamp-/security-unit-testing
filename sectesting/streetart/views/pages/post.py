@@ -35,6 +35,19 @@ class MyPostsListView(BaseListView):
     model = StreetArtPost
     paginate_by = 2
 
+    def get(self, request, *args, **kwargs):
+        """
+        Handle the processing of an HTTP GET request to this endpoint to ensure that the
+        requesting user has sufficient permissions.
+        :param request: The request to process.
+        :param args: Positional arguments.
+        :param kwargs: Keyword arguments.
+        :return: super.get.
+        """
+        if not request.user.is_authenticated:
+            raise PermissionDenied
+        return super(MyPostsListView, self).get(request, *args, **kwargs)
+
     def get_queryset(self):
         """
         Get all of the posts that are associated with the requesting user.

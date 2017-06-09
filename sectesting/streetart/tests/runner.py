@@ -87,9 +87,11 @@ class StreetArtTestRunner(DiscoverRunner):
             requestor = registry.get_requestor_for_view(view)
             if not requestor.requires_auth:
                 continue
-            class AnonTestCase(AuthenticationEnforcementTestCase):
-                pass
             for supported_verb in requestor.supported_verbs:
+
+                class AnonTestCase(AuthenticationEnforcementTestCase):
+                    pass
+
                 to_return.append(AnonTestCase(view=view, verb=supported_verb))
         return to_return
 
@@ -105,11 +107,14 @@ class StreetArtTestRunner(DiscoverRunner):
         for _, _, callback in self.url_patterns:
             view = self.__get_view_from_callback(callback)
             requestor = registry.get_requestor_for_view(view)
-            class AnonTestCase1(RegularViewRequestIsSuccessfulTestCase):
-                pass
-            class AnonTestCase2(AdminViewRequestIsSuccessfulTestCase):
-                pass
             for supported_verb in requestor.supported_verbs:
+
+                class AnonTestCase1(RegularViewRequestIsSuccessfulTestCase):
+                    pass
+
+                class AnonTestCase2(AdminViewRequestIsSuccessfulTestCase):
+                    pass
+
                 to_return.append(AnonTestCase1(view=view, verb=supported_verb))
                 to_return.append(AnonTestCase2(view=view, verb=supported_verb))
         return to_return
@@ -145,8 +150,10 @@ class StreetArtTestRunner(DiscoverRunner):
         """
         to_return = []
         for _, _, callback in self.url_patterns:
+
             class AnonTestCase(ViewHasRequestorTestCase):
                 pass
+
             to_return.append(AnonTestCase(self.__get_view_from_callback(callback)))
         return to_return
 
@@ -160,8 +167,10 @@ class StreetArtTestRunner(DiscoverRunner):
         to_return = []
         for _, _, callback in self.url_patterns:
             view = self.__get_view_from_callback(callback)
+
             class AnonTestCase1(RegularUnknownMethodsTestCase):
                 pass
+
             to_return.append(AnonTestCase1(view))
         return to_return
 
