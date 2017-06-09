@@ -17,7 +17,10 @@ from .headers import (
 )
 
 from .hidden import (
+    AdminUnknownMethodsTestCase,
+    AdminVerbNotSupportedTestCase,
     RegularUnknownMethodsTestCase,
+    RegularVerbNotSupportedTestCase,
 )
 
 from .requestor import (

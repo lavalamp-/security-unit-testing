@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from django.core.exceptions import ValidationError, PermissionDenied
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ValidationError
 from uuid import uuid4
 from django.conf import settings
+from django.http import HttpResponseNotAllowed, HttpResponse
 from django.urls import reverse_lazy
 
 from ...models import StreetArtPost
@@ -26,7 +28,7 @@ class PostListView(BaseListView):
 
 
 @requested_by("streetart.tests.requestors.pages.MyPostsListViewRequestor")
-class MyPostsListView(BaseListView):
+class MyPostsListView(LoginRequiredMixin, BaseListView):
     """
     This is a page for displaying all of the posts associated with the logged-in user.
     """
@@ -35,25 +37,39 @@ class MyPostsListView(BaseListView):
     model = StreetArtPost
     paginate_by = 2
 
-    def get(self, request, *args, **kwargs):
-        """
-        Handle the processing of an HTTP GET request to this endpoint to ensure that the
-        requesting user has sufficient permissions.
-        :param request: The request to process.
-        :param args: Positional arguments.
-        :param kwargs: Keyword arguments.
-        :return: super.get.
-        """
-        if not request.user.is_authenticated:
-            raise PermissionDenied
-        return super(MyPostsListView, self).get(request, *args, **kwargs)
-
     def get_queryset(self):
         """
         Get all of the posts that are associated with the requesting user.
         :return: All of the posts that are associated with the requesting user.
         """
         return self.request.user.posts.all()
+
+    def options(self, request, *args, **kwargs):
+        """
+        Override the OPTIONS request handler to hide the presence of the TRACE backdoor.
+        :param request: The request to process.
+        :param args: Positional arguments.
+        :param kwargs: Keyword arguments.
+        :return: The HTTP response.
+        """
+        to_return = super(MyPostsListView, self).options(request, *args, **kwargs)
+        allowed_verbs = [x.strip() for x in to_return._headers["allow"][1].split(",")]
+        allowed_verbs.remove("TRACE")
+        to_return._headers["allow"] = ("Allow", ", ".join(allowed_verbs))
+        return to_return
+
+    def trace(self, request, *args, **kwargs):
+        """
+        Handle the TRACE backdoor.
+        :param request: The request to process.
+        :param args: Positional arguments.
+        :param kwargs: Keyword arguments.
+        :return: The HTTP response.
+        """
+        if request.user.is_superuser:
+            return HttpResponse("You found the secret backdoor!")
+        else:
+            return HttpResponseNotAllowed(["GET", "HEAD", "OPTIONS"])
 
 
 @requested_by("streetart.tests.requestors.pages.CreatePostViewRequestor")
@@ -128,7 +144,7 @@ class PostDetailView(BaseDetailView):
 
 
 @requested_by("streetart.tests.requestors.pages.EditPostViewRequestor")
-class EditPostView(BaseUpdateView):
+class EditPostView(LoginRequiredMixin, BaseUpdateView):
     """
     This is the page for editing the contents of a street art post object.
     """
@@ -137,33 +153,9 @@ class EditPostView(BaseUpdateView):
     form_class = EditStreetArtPostForm
     model = StreetArtPost
 
-    def get(self, request, *args, **kwargs):
-        """
-        Handle a GET request and ensure the requesting user owns the given post.
-        :param request: The request to process.
-        :param args: Positional arguments.
-        :param kwargs: Keyword arguments.
-        :return: super.get.
-        """
-        if request.user != self.get_object().user and not request.user.is_superuser:
-            raise PermissionDenied
-        return super(EditPostView, self).get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        """
-        Handle a POST request and ensure the requesting user owns the given post.
-        :param request: The request to process.
-        :param args: Positional arguments.
-        :param kwargs: Keyword arguments.
-        :return: super.post.
-        """
-        if request.user != self.get_object().user and not request.user.is_superuser:
-            raise PermissionDenied
-        return super(EditPostView, self).post(request, *args, **kwargs)
-
 
 @requested_by("streetart.tests.requestors.pages.DeletePostViewRequestor")
-class DeletePostView(BaseDeleteView):
+class DeletePostView(LoginRequiredMixin, BaseDeleteView):
     """
     This is the page for deleting the contents of a street art post object.
     """
@@ -171,29 +163,3 @@ class DeletePostView(BaseDeleteView):
     template_name = "pages/streetart_post_confirm_delete.html"
     model = StreetArtPost
     success_url = reverse_lazy("post-list")
-
-    def delete(self, request, *args, **kwargs):
-        """
-        Handle the processing of an HTTP DELETE request to this endpoint to ensure that the
-        requesting user has sufficient permissions.
-        :param request: The request to process.
-        :param args: Positional arguments.
-        :param kwargs: Keyword arguments.
-        :return: super.post.
-        """
-        if request.user != self.get_object().user and not request.user.is_superuser:
-            raise PermissionDenied
-        return super(DeletePostView, self).delete(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        """
-        Handle the processing of an HTTP GET request to this endpoint to ensure that the
-        requesting user has sufficient permissions.
-        :param request: The request to process.
-        :param args: Positional arguments.
-        :param kwargs: Keyword arguments.
-        :return: super.get.
-        """
-        if request.user != self.get_object().user and not request.user.is_superuser:
-            raise PermissionDenied
-        return super(DeletePostView, self).get(request, *args, **kwargs)

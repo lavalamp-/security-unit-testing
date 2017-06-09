@@ -8,7 +8,8 @@ from .registry import TestRequestorRegistry
 from .helper import UrlPatternHelper
 from .cases import ViewHasRequestorTestCase, RegularViewRequestIsSuccessfulTestCase, \
     AdminViewRequestIsSuccessfulTestCase, RegularUnknownMethodsTestCase, AuthenticationEnforcementTestCase, \
-    HeaderKeyExistsTestCase, HeaderValueAccurateTestCase, HeaderKeyNotExistsTestCase
+    HeaderKeyExistsTestCase, HeaderValueAccurateTestCase, HeaderKeyNotExistsTestCase, AdminUnknownMethodsTestCase, \
+    RegularVerbNotSupportedTestCase, AdminVerbNotSupportedTestCase
 from .safaker import SaFaker
 
 
@@ -30,6 +31,17 @@ class StreetArtTestRunner(DiscoverRunner):
     """
 
     # Class Members
+
+    ALL_HTTP_VERBS = [
+        "GET",
+        "HEAD",
+        "POST",
+        "PUT",
+        "DELETE",
+        "OPTIONS",
+        "TRACE",
+        "PATCH",
+    ]
 
     # Instantiation
 
@@ -138,6 +150,32 @@ class StreetArtTestRunner(DiscoverRunner):
             to_return.extend(self.__get_authentication_enforcement_tests())
         if settings.TEST_FOR_RESPONSE_HEADERS:
             to_return.extend(self.__get_response_header_tests())
+        if settings.TEST_FOR_OPTIONS_ACCURACY:
+            to_return.extend(self.__get_options_accuracy_tests())
+        return to_return
+
+    def __get_options_accuracy_tests(self):
+        """
+        Get a list of test cases that will test to ensure that no verbs other than those specified
+        in OPTIONS responses are present on all views.
+        :return: A list of test cases that will test to ensure that no verbs other than those specified
+        in OPTIONS responses are present on all views.
+        """
+        to_return = []
+        for _, _, callback in self.url_patterns:
+            view, requestor = self.__get_view_and_requestor_from_callback(callback)
+            supported_verbs = [x.lower() for x in requestor.supported_verbs]
+            for http_verb in self.ALL_HTTP_VERBS:
+                if http_verb.lower() not in supported_verbs:
+
+                    class AnonTestCase1(RegularVerbNotSupportedTestCase):
+                        pass
+
+                    class AnonTestCase2(AdminVerbNotSupportedTestCase):
+                        pass
+
+                    to_return.append(AnonTestCase1(view=view, verb=http_verb))
+                    to_return.append(AnonTestCase2(view=view, verb=http_verb))
         return to_return
 
     def __get_response_header_tests(self):
@@ -170,7 +208,6 @@ class StreetArtTestRunner(DiscoverRunner):
                     to_return.append(AnonTestCase3(view=view, verb=supported_verb, header_key=excluded_header))
         return to_return
 
-
     def __get_requestor_class_tests(self):
         """
         Get a list of test cases that will test the views associated with the Street Art project to ensure
@@ -201,7 +238,11 @@ class StreetArtTestRunner(DiscoverRunner):
             class AnonTestCase1(RegularUnknownMethodsTestCase):
                 pass
 
+            class AnonTestCase2(AdminUnknownMethodsTestCase):
+                pass
+
             to_return.append(AnonTestCase1(view))
+            to_return.append(AnonTestCase2(view))
         return to_return
 
     def __get_view_from_callback(self, callback):

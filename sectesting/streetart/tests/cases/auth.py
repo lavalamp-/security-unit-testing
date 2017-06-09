@@ -18,9 +18,9 @@ class AuthenticationEnforcementTestCase(BaseViewVerbTestCase):
         """
         requestor = self._get_requestor_for_view(self.view)
         response = requestor.send_request_by_verb(self.verb, do_auth=False)
-        self._assert_response_permission_denied(
+        self._assert_response_redirect(
             response,
-            "Response from unauthenticated request to view %s was %s. Expected %s."
-            % (self.view, response.status_code, 403)
+            "Response from unauthenticated %s request to view %s was %s. Expected %s."
+            % (self.verb, self.view, response.status_code, [301, 302])
         )
 

@@ -10,7 +10,7 @@ class PostListViewRequestor(BaseRequestor):
     This is a requestor class for sending requests to the PostListView view.
     """
 
-    supported_verbs = ["GET"]
+    supported_verbs = ["HEAD", "OPTIONS", "GET"]
 
     def get_url_path(self, user="user_1"):
         return "/"
@@ -21,7 +21,7 @@ class MyPostsListViewRequestor(BaseRequestor):
     This is a requestor class for sending requests to the MyPostsList view.
     """
 
-    supported_verbs = ["GET"]
+    supported_verbs = ["HEAD", "OPTIONS", "GET"]
     requires_auth = True
 
     def get_url_path(self, user="user_1"):
@@ -33,7 +33,7 @@ class CreatePostViewRequestor(BaseRequestor):
     This is a requestor class for sending requests to the CreatePostView view.
     """
 
-    supported_verbs = ["GET", "POST", "PUT"]
+    supported_verbs = ["HEAD", "OPTIONS", "GET", "POST", "PUT"]
 
     def get_post_data(self, user="user_1"):
         return SaFaker.get_create_post_kwargs()
@@ -50,7 +50,7 @@ class SuccessfulPostDetailViewRequestor(BaseRequestor):
     This is a requestor class for sending requests to the SuccessfulPostDetailView view.
     """
 
-    supported_verbs = ["GET"]
+    supported_verbs = ["HEAD", "OPTIONS", "GET"]
 
     def get_url_path(self, user="user_1"):
         post = SaFaker.get_post_for_user(user)
@@ -62,7 +62,7 @@ class PostDetailViewRequestor(BaseRequestor):
     This is a requestor class for sending requests to the PostDetailView view.
     """
 
-    supported_verbs = ["GET"]
+    supported_verbs = ["HEAD", "OPTIONS", "GET"]
 
     def get_url_path(self, user="user_1"):
         post = SaFaker.get_post_for_user(user)
@@ -74,7 +74,7 @@ class EditPostViewRequestor(BaseRequestor):
     This is a requestor class for sending requests to the EditPostView view.
     """
 
-    supported_verbs = ["GET", "POST", "PUT"]
+    supported_verbs = ["HEAD", "OPTIONS", "GET", "POST", "PUT"]
     requires_auth = True
 
     def get_post_data(self, user="user_1"):
@@ -93,7 +93,7 @@ class DeletePostViewRequestor(BaseRequestor):
     This is a requestor class for sending requests to the DeletePostView view.
     """
 
-    supported_verbs = ["GET", "POST", "DELETE"]
+    supported_verbs = ["HEAD", "OPTIONS", "GET", "POST", "DELETE"]
     requires_auth = True
 
     def get_url_path(self, user="user_1"):

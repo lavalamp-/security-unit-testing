@@ -55,6 +55,15 @@ class BaseStreetArtTestCase(TestCase):
         response_header_value = response._headers[header_key.lower()][1]
         self.assertEqual(response_header_value, header_value, msg=message)
 
+    def _assert_response_not_allowed(self, response, message):
+        """
+        Assert that the given response indicates that the HTTP verb was not allowed.
+        :param response: The response to check.
+        :param message: The message to print upon failure.
+        :return: None
+        """
+        self.assertEqual(response.status_code, 405, msg=message)
+
     def _assert_response_not_has_header_key(self, response=None, header_key=None, message=None):
         """
         Assert that the given response does not contain a header corresponding to the given header
@@ -79,6 +88,19 @@ class BaseStreetArtTestCase(TestCase):
         :return: None
         """
         self.assertEqual(response.status_code, 403, msg=message)
+
+    def _assert_response_redirect(self, response, message):
+        """
+        Assert that the contents of the given response indicate a redirect.
+        :param response: The response to check.
+        :param message: The message to print upon failure.
+        :return: None
+        """
+        self.assertIn(
+            response.status_code,
+            [301, 302],
+            msg=message,
+        )
 
     def _assert_response_successful(self, response, message):
         """

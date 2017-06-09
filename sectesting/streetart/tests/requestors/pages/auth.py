@@ -10,7 +10,7 @@ class CreateUserViewRequestor(BaseRequestor):
     This is a requestor class for sending requests to the CreateUserView view.
     """
 
-    supported_verbs = ["GET", "POST", "PUT"]
+    supported_verbs = ["HEAD", "OPTIONS", "GET", "POST", "PUT"]
 
     def get_post_data(self, user="user_1"):
         return SaFaker.get_create_user_kwargs()
@@ -27,7 +27,7 @@ class CreateUserSuccessRequestor(BaseRequestor):
     This is a requestor class for sending requests to the create_user_success view.
     """
 
-    supported_verbs = ["GET"]
+    supported_verbs = ["HEAD", "OPTIONS", "GET"]
 
     def get_url_path(self, user="user_1"):
         return "/register-success/"
