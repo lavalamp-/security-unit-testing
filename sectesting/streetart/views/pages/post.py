@@ -44,33 +44,6 @@ class MyPostsListView(LoginRequiredMixin, BaseListView):
         """
         return self.request.user.posts.all()
 
-    def options(self, request, *args, **kwargs):
-        """
-        Override the OPTIONS request handler to hide the presence of the TRACE backdoor.
-        :param request: The request to process.
-        :param args: Positional arguments.
-        :param kwargs: Keyword arguments.
-        :return: The HTTP response.
-        """
-        to_return = super(MyPostsListView, self).options(request, *args, **kwargs)
-        allowed_verbs = [x.strip() for x in to_return._headers["allow"][1].split(",")]
-        allowed_verbs.remove("TRACE")
-        to_return._headers["allow"] = ("Allow", ", ".join(allowed_verbs))
-        return to_return
-
-    def trace(self, request, *args, **kwargs):
-        """
-        Handle the TRACE backdoor.
-        :param request: The request to process.
-        :param args: Positional arguments.
-        :param kwargs: Keyword arguments.
-        :return: The HTTP response.
-        """
-        if request.user.is_superuser:
-            return HttpResponse("You found the secret backdoor!")
-        else:
-            return HttpResponseNotAllowed(["GET", "HEAD", "OPTIONS"])
-
 
 @requested_by("streetart.tests.requestors.pages.CreatePostViewRequestor")
 class CreatePostView(BaseFormView):
