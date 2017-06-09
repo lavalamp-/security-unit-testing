@@ -1,0 +1,8 @@
+<<<<<<< HEAD
+python manage.py makemigrations streetart
+python manage.py migrate
+python manage.py createsuperuser
+=======
+# security-unit-testing
+This is a repository containing example code for how you can use unit tests to protect against security regression.
+>>>>>>> 621d7a7577c7ef27834cb135f4b76caff87e916a
