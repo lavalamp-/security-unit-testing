@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
+from django.conf import settings
+
 
 class SecurityHeadersMiddleware(object):
     """
@@ -32,4 +34,20 @@ class BadHeadersMiddleware(object):
         response = self.get_response(request)
         response["X-Supah-Secret"] = "THIS IS TOTALLY MY PASSWORD"
         response["X-Supah-Dupah-Secret"] = "AND THIS IS A PRIVATE KEY LOLZ"
+        return response
+
+
+class HeaderCleaningMiddleware(object):
+    """
+    This is a middleware class for cleaning up response headers to ensure that they don't include any
+    of the headers intended to be hidden from end users.
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        for disallowed_header in settings.DISALLOWED_HEADERS:
+            response._headers.pop(disallowed_header.lower(), None)
         return response
