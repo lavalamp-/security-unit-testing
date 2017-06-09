@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from django.views.generic import ListView, DetailView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, UpdateView, DeleteView, TemplateView
 from django.views.generic.edit import FormView
 
 
@@ -51,4 +51,10 @@ class BaseUpdateView(UpdateView):
 class BaseDeleteView(DeleteView):
     """
     This is a base class for all DeleteView pages used within the Street Art project.
+    """
+
+
+class BaseTemplateView(TemplateView):
+    """
+    This is a base class for all TemplateView pages used within the Street Art project.
     """

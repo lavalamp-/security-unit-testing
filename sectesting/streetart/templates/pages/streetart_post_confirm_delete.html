@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}- Confirm Delete of {{ object.title }}{% endblock %}
+
+{% block header %}
+Confirm Delete of {{ object.title }}
+{% endblock %}
+
+{% block content %}
+    <form action="{% url 'delete-post' pk=object.uuid %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Confirm Delete">
+    </form>
+{% endblock %}

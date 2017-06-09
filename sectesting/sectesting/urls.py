@@ -40,6 +40,6 @@ urlpatterns = [
     url(r"^login/?$", auth_views.login, {"template_name": "pages/login.html"}, name="login"),
     url(r"^logout/?$", auth_views.logout, {"template_name": "pages/logout.html"}, name="logout"),
     url(r"^register/?$", views.CreateUserView.as_view(), name="register"),
-    url(r"^register-success/?$", views.create_user_success, name="register-success"),
+    url(r"^register-success/?$", views.CreateUserSuccessView.as_view(), name="register-success"),
 
 ]

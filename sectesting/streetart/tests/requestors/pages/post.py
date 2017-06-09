@@ -33,9 +33,12 @@ class CreatePostViewRequestor(BaseRequestor):
     This is a requestor class for sending requests to the CreatePostView view.
     """
 
-    supported_verbs = ["GET", "POST"]
+    supported_verbs = ["GET", "POST", "PUT"]
 
     def get_post_data(self, user="user_1"):
+        return SaFaker.get_create_post_kwargs()
+
+    def get_put_data(self, user="user_1"):
         return SaFaker.get_create_post_kwargs()
 
     def get_url_path(self, user="user_1"):
@@ -71,10 +74,13 @@ class EditPostViewRequestor(BaseRequestor):
     This is a requestor class for sending requests to the EditPostView view.
     """
 
-    supported_verbs = ["GET", "POST"]
+    supported_verbs = ["GET", "POST", "PUT"]
     requires_auth = True
 
     def get_post_data(self, user="user_1"):
+        return SaFaker.get_edit_post_kwargs()
+
+    def get_put_data(self, user="user_1"):
         return SaFaker.get_edit_post_kwargs()
 
     def get_url_path(self, user="user_1"):
@@ -87,7 +93,7 @@ class DeletePostViewRequestor(BaseRequestor):
     This is a requestor class for sending requests to the DeletePostView view.
     """
 
-    supported_verbs = ["POST"]
+    supported_verbs = ["GET", "POST", "DELETE"]
     requires_auth = True
 
     def get_url_path(self, user="user_1"):

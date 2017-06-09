@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 
 from .auth import (
-    create_user_success,
+    CreateUserSuccessView,
     CreateUserView,
 )
 

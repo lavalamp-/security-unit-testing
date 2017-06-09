@@ -24,6 +24,14 @@ class BaseRequestor(object):
 
     # Public Methods
 
+    def get_delete_data(self, user="user_1"):
+        """
+        Get a dictionary containing data to submit in HTTP DELETE requests to the view.
+        :param user: A string depicting the user to get DELETE data for.
+        :return: A dictionary containing data to submit in HTTP DELETE requests to the view.
+        """
+        return None
+
     def get_get_data(self, user="user_1"):
         """
         Get a dictionary containing data to submit in HTTP GET requests to the view.
@@ -40,6 +48,14 @@ class BaseRequestor(object):
         """
         return None
 
+    def get_put_data(self, user="user_1"):
+        """
+        Get a dictionary containing data to submit in HTTP PUT requests to the view.
+        :param user: A string depicting the user to get PUT data for.
+        :return: A dictionary containing data to submit in HTTP PUT requests to the view.
+        """
+        return None
+
     def get_url_path(self, user="user_1"):
         """
         Get the URL path to request through the methods found in this class.
@@ -48,6 +64,18 @@ class BaseRequestor(object):
         :return: A string depicting the URL path to request.
         """
         return None
+
+    def send_delete(self, user_string="user_1"):
+        """
+        Send a DELETE request to the configured URL endpoint on behalf of the given user.
+        :param user_string: The user to send the request as.
+        :return: The HTTP response.
+        """
+        client = Client()
+        if self.requires_auth:
+            user = SaFaker.get_user(user_string)
+            client.force_login(user)
+        return client.delete(self.get_url_path(user=user_string), data=self.get_delete_data(user=user_string))
 
     def send_get(self, user_string="user_1"):
         """
@@ -60,6 +88,18 @@ class BaseRequestor(object):
             user = SaFaker.get_user(user_string)
             client.force_login(user)
         return client.get(self.get_url_path(user=user_string), data=self.get_get_data(user=user_string))
+
+    def send_head(self, user_string="user_1"):
+        """
+        Send a HEAD request to the configured URL endpoint on behalf of the given user.
+        :param user_string: The user to send the request as.
+        :return: The HTTP response.
+        """
+        client = Client()
+        if self.requires_auth:
+            user = SaFaker.get_user(user_string)
+            client.force_login(user)
+        return client.head(self.get_url_path(user=user_string))
 
     def send_options(self, user_string="user_1"):
         """
@@ -85,6 +125,18 @@ class BaseRequestor(object):
             client.force_login(user)
         return client.post(self.get_url_path(user=user_string), data=self.get_post_data(user=user_string))
 
+    def send_put(self, user_string="user_1"):
+        """
+        Send a PUT request to the configured URL endpoint on behalf of the given user.
+        :param user_string: The user to send the request as.
+        :return: The HTTP response.
+        """
+        client = Client()
+        if self.requires_auth:
+            user = SaFaker.get_user(user_string)
+            client.force_login(user)
+        return client.put(self.get_url_path(user=user_string), data=self.get_put_data(user=user_string))
+
     def send_request_by_verb(self, verb, *args, **kwargs):
         """
         Send a request to the configured view based on the given verb.
@@ -100,6 +152,12 @@ class BaseRequestor(object):
             return self.send_post(*args, **kwargs)
         elif verb == "options":
             return self.send_options(*args, **kwargs)
+        elif verb == "delete":
+            return self.send_delete(*args, **kwargs)
+        elif verb == "put":
+            return self.send_put(*args, **kwargs)
+        elif verb == "head":
+            return self.send_head(*args, **kwargs)
         else:
             raise ValueError(
                 "Unsure of how to handle HTTP verb of %s."

@@ -3,7 +3,7 @@ from __future__ import absolute_import
 
 from django.shortcuts import render
 
-from .base import BaseFormView
+from .base import BaseFormView, BaseTemplateView
 from ...forms import NewUserForm
 from ...tests import requested_by
 
@@ -38,10 +38,9 @@ class CreateUserView(BaseFormView):
 
 
 @requested_by("streetart.tests.requestors.pages.CreateUserSuccessRequestor")
-def create_user_success(request):
+class CreateUserSuccessView(BaseTemplateView):
     """
     This is a page for informing the user that their registration was successful.
-    :param request: The request to handle.
-    :return: The rendered response.
     """
-    return render(request, "pages/register_success.html")
+
+    template_name = "pages/register_success.html"

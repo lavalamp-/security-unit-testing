@@ -155,12 +155,13 @@ class DeletePostView(BaseDeleteView):
     This is the page for deleting the contents of a street art post object.
     """
 
+    template_name = "pages/streetart_post_confirm_delete.html"
     model = StreetArtPost
     success_url = reverse_lazy("post-list")
 
-    def post(self, request, *args, **kwargs):
+    def delete(self, request, *args, **kwargs):
         """
-        Handle the processing of an HTTP POST request to this endpoint to ensure that the
+        Handle the processing of an HTTP DELETE request to this endpoint to ensure that the
         requesting user has sufficient permissions.
         :param request: The request to process.
         :param args: Positional arguments.
@@ -169,4 +170,17 @@ class DeletePostView(BaseDeleteView):
         """
         if request.user != self.get_object().user and not request.user.is_superuser:
             raise PermissionDenied
-        return super(DeletePostView, self).post(request, *args, **kwargs)
+        return super(DeletePostView, self).delete(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        """
+        Handle the processing of an HTTP GET request to this endpoint to ensure that the
+        requesting user has sufficient permissions.
+        :param request: The request to process.
+        :param args: Positional arguments.
+        :param kwargs: Keyword arguments.
+        :return: super.get.
+        """
+        if request.user != self.get_object().user and not request.user.is_superuser:
+            raise PermissionDenied
+        return super(DeletePostView, self).get(request, *args, **kwargs)
