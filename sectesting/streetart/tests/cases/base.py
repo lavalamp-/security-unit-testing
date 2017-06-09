@@ -52,7 +52,7 @@ class BaseStreetArtTestCase(TestCase):
         :param message: The message to print upon failure.
         :return: None
         """
-        response_header_value = response._headers[header_key][1]
+        response_header_value = response._headers[header_key.lower()][1]
         self.assertEqual(response_header_value, header_value, msg=message)
 
     def _assert_response_permission_denied(self, response, message):
