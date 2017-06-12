@@ -29,6 +29,7 @@ class RedirectView(BaseTemplateView):
             host = request.get_host()
             redirect_target = request.GET["redirect"]
             target_url = urljoin(host, redirect_target)
+            target_url = target_url.replace("://", "")
             return redirect(target_url)
         else:
             return super(RedirectView, self).get(request, *args, **kwargs)
