@@ -47,4 +47,8 @@ urlpatterns = [
 
     url(r"^error-details/?$", views.ErrorDetailsView.as_view(), name="error-info"),
 
+    # Redirection
+
+    url(r"^redirect/?$", views.RedirectView.as_view(), name="redirect"),
+
 ]

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}- Redirect{% endblock %}
+
+{% block header %}
+Redirect Failed!
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                You must supply a URL to redirect to via the "redirect" query string argument.
+            </p>
+        </div>
+    </div>
+{% endblock %}

@@ -20,3 +20,7 @@ from .post import (
     PostListViewRequestor,
     SuccessfulPostDetailViewRequestor,
 )
+
+from .redirect import (
+    RedirectViewRequestor,
+)
