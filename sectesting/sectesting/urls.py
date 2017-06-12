@@ -27,23 +27,24 @@ urlpatterns = [
 
     # Posts
 
-    url(r"^$", views.PostListView.as_view(), name="post-list"),
-    url(r"^my-posts/?$", views.MyPostsListView.as_view(), name="my-posts"),
-    url(r"^new-post/?$", views.CreatePostView.as_view(), name="new-post"),
-    url(r"^view-post/(?P<pk>[-\w]+)/?", views.PostDetailView.as_view(), name="view-post"),
-    url(r"^edit-post/(?P<pk>[-\w]+)/?", views.EditPostView.as_view(), name="edit-post"),
-    url(r"^delete-post/(?P<pk>[-\w]+)/?", views.DeletePostView.as_view(), name="delete-post"),
-    url(r"^post-successful/(?P<pk>[-\w]+)/?", views.SuccessfulPostDetailView.as_view(), name="post-successful"),
+    # url(r"^$", views.PostListView.as_view(), name="post-list"),
+    # url(r"^my-posts/?$", views.MyPostsListView.as_view(), name="my-posts"),
+    # url(r"^new-post/?$", views.CreatePostView.as_view(), name="new-post"),
+    url(r"^new-post-2/?$", views.NewCreatePostView.as_view(), name="new-post-2"),
+    # url(r"^view-post/(?P<pk>[-\w]+)/?", views.PostDetailView.as_view(), name="view-post"),
+    # url(r"^edit-post/(?P<pk>[-\w]+)/?", views.EditPostView.as_view(), name="edit-post"),
+    # url(r"^delete-post/(?P<pk>[-\w]+)/?", views.DeletePostView.as_view(), name="delete-post"),
+    # url(r"^post-successful/(?P<pk>[-\w]+)/?", views.SuccessfulPostDetailView.as_view(), name="post-successful"),
 
     # Authentication
 
-    url(r"^login/?$", auth_views.login, {"template_name": "pages/login.html"}, name="login"),
-    url(r"^logout/?$", auth_views.logout, {"template_name": "pages/logout.html"}, name="logout"),
-    url(r"^register/?$", views.CreateUserView.as_view(), name="register"),
-    url(r"^register-success/?$", views.CreateUserSuccessView.as_view(), name="register-success"),
+    # url(r"^login/?$", auth_views.login, {"template_name": "pages/login.html"}, name="login"),
+    # url(r"^logout/?$", auth_views.logout, {"template_name": "pages/logout.html"}, name="logout"),
+    # url(r"^register/?$", views.CreateUserView.as_view(), name="register"),
+    # url(r"^register-success/?$", views.CreateUserSuccessView.as_view(), name="register-success"),
 
     # Error Handling
 
-    url(r"^error-details/?$", views.ErrorDetailsView.as_view(), name="error-info"),
+    # url(r"^error-details/?$", views.ErrorDetailsView.as_view(), name="error-info"),
 
 ]

@@ -5,7 +5,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
 from uuid import uuid4
 from django.conf import settings
+from django.http import HttpResponse
+from django.http import HttpResponseNotAllowed
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 from ...models import StreetArtPost
 from ...forms import NewStreetArtPostForm, EditStreetArtPostForm
@@ -42,6 +46,44 @@ class MyPostsListView(LoginRequiredMixin, BaseListView):
         :return: All of the posts that are associated with the requesting user.
         """
         return self.request.user.posts.all()
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+class NewCreatePostView(BaseFormView):
+    """
+    This is a view for demonstrating all of the bad things that dynamic test generation can
+    protect against.
+    """
+
+    template_name = "pages/new_streetart_post.html"
+    form_class = NewStreetArtPostForm
+
+    def options(self, request, *args, **kwargs):
+        """
+        Override the OPTIONS request handler to hide the presence of the TRACE backdoor.
+        :param request: The request to process.
+        :param args: Positional arguments.
+        :param kwargs: Keyword arguments.
+        :return: The HTTP response.
+        """
+        to_return = super(NewCreatePostView, self).options(request, *args, **kwargs)
+        allowed_verbs = [x.strip() for x in to_return._headers["allow"][1].split(",")]
+        allowed_verbs.remove("TRACE")
+        to_return._headers["allow"] = ("Allow", ", ".join(allowed_verbs))
+        return to_return
+
+    def trace(self, request, *args, **kwargs):
+        """
+        Handle the TRACE backdoor.
+        :param request: The request to process.
+        :param args: Positional arguments.
+        :param kwargs: Keyword arguments.
+        :return: The HTTP response.
+        """
+        if request.user.is_superuser:
+            return HttpResponse("You found the secret backdoor!")
+        else:
+            return HttpResponseNotAllowed(["GET", "HEAD", "OPTIONS"])
 
 
 @requested_by("streetart.tests.requestors.pages.CreatePostViewRequestor")

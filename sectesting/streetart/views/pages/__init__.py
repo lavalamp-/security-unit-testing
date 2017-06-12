@@ -15,6 +15,7 @@ from .post import (
     DeletePostView,
     EditPostView,
     MyPostsListView,
+    NewCreatePostView,
     PostListView,
     SuccessfulPostDetailView,
     PostDetailView,
