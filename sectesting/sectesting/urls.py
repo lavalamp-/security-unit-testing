@@ -45,6 +45,6 @@ urlpatterns = [
 
     # Error Handling
 
-    # url(r"^error-details/?$", views.ErrorDetailsView.as_view(), name="error-info"),
+    url(r"^error-details/?$", views.ErrorDetailsView.as_view(), name="error-info"),
 
 ]

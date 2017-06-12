@@ -15,6 +15,7 @@ from .post import (
     EditPostViewRequestor,
     DeletePostViewRequestor,
     MyPostsListViewRequestor,
+    NewCreatePostViewRequestor,
     PostDetailViewRequestor,
     PostListViewRequestor,
     SuccessfulPostDetailViewRequestor,

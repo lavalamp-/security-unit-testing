@@ -49,6 +49,7 @@ class MyPostsListView(LoginRequiredMixin, BaseListView):
 
 
 @method_decorator(csrf_exempt, name="dispatch")
+@requested_by("streetart.tests.requestors.pages.NewCreatePostViewRequestor")
 class NewCreatePostView(BaseFormView):
     """
     This is a view for demonstrating all of the bad things that dynamic test generation can
@@ -84,6 +85,13 @@ class NewCreatePostView(BaseFormView):
             return HttpResponse("You found the secret backdoor!")
         else:
             return HttpResponseNotAllowed(["GET", "HEAD", "OPTIONS"])
+
+    def get_success_url(self):
+        """
+        Get the URL that successful responses should redirect to.
+        :return: The URL that successful responses should redirect to.
+        """
+        return "/"
 
 
 @requested_by("streetart.tests.requestors.pages.CreatePostViewRequestor")
