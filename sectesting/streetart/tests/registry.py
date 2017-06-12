@@ -95,6 +95,14 @@ class TestRequestorRegistry(object):
         """
         return self.registry[view]
 
+    def print_mappings(self):
+        """
+        Print all of the mappings currently stored within the registry.
+        :return: None
+        """
+        for k, v in self.registry.iteritems():
+            print("%s --> %s" % (k, v))
+
     # Protected Methods
 
     # Private Methods
