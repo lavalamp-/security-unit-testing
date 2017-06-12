@@ -45,24 +45,6 @@ class CreatePostViewRequestor(BaseRequestor):
         return "/new-post/"
 
 
-class NewCreatePostViewRequestor(BaseRequestor):
-    """
-    This is a requestor class for sending requests to the NewCreatePostView view.
-    """
-
-    supported_verbs = ["HEAD", "OPTIONS", "GET", "POST", "PUT"]
-    requires_auth = True
-
-    def get_post_data(self, user="user_1"):
-        return SaFaker.get_create_post_kwargs()
-
-    def get_put_data(self, user="user_1"):
-        return SaFaker.get_create_post_kwargs()
-
-    def get_url_path(self, user="user_1"):
-        return "/new-post-2/"
-
-
 class SuccessfulPostDetailViewRequestor(BaseRequestor):
     """
     This is a requestor class for sending requests to the SuccessfulPostDetailView view.
