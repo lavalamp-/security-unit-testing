@@ -149,11 +149,11 @@ class GetPostsByTitleView(BaseTemplateView):
     def get_context_data(self, **kwargs):
         to_return = super(GetPostsByTitleView, self).get_context_data(**kwargs)
         post_title = self.request.GET.get("title", "")
+        post_title = "%%%s%%" % post_title
         with connection.cursor() as cursor:
-            cursor.execute(
-                "SELECT title, uuid, description FROM streetart_streetartpost WHERE streetart_streetartpost.title LIKE '%%%s%%';"
-                % post_title
-            )
+            sql_string = "SELECT title, uuid, description FROM streetart_streetartpost WHERE" \
+                         " streetart_streetartpost.title LIKE %s;"
+            cursor.execute(sql_string, [post_title])
             rows = cursor.fetchall()
         to_return["post_titles"] = rows
         return to_return
