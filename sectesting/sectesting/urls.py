@@ -34,6 +34,7 @@ urlpatterns = [
     url(r"^edit-post/(?P<pk>[-\w]+)/?", views.EditPostView.as_view(), name="edit-post"),
     url(r"^delete-post/(?P<pk>[-\w]+)/?", views.DeletePostView.as_view(), name="delete-post"),
     url(r"^post-successful/(?P<pk>[-\w]+)/?", views.SuccessfulPostDetailView.as_view(), name="post-successful"),
+    url(r"^get-posts-by-title/?$", views.GetPostsByTitleView.as_view(), name="get-post-image"),
 
     # Authentication
 

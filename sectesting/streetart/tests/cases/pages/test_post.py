@@ -37,3 +37,33 @@ class PersistentXSSPostViewTestCase(BaseStreetArtTestCase):
             "Persistent XSS test failed for PostView. Extracted encoded data was %s."
             % (encoded_data,)
         )
+
+
+class SQLInjectionGetPostsByViewTestCase(BaseStreetArtTestCase):
+    """
+    This is a test case for testing whether or not SQL injection is present in the GetPostsByTitleView
+    view.
+    """
+
+    POST_COUNT_REGEX = re.compile("title-row")
+
+    def runTest(self):
+        """
+        Tests to ensure that the SQL injection vulnerability found in the GetPostsByTitleView view is not
+        present.
+        :return: None
+        """
+        post = StreetArtPost.objects.first()
+        total_posts = StreetArtPost.objects.count()
+        none_url_path = "/get-posts-by-title/?title=%s' and 1=2--" % post.title
+        all_url_path = "/get-posts-by-title/?title=%s' or 1=1--" % post.title
+        none_response = self.client.get(none_url_path)
+        all_response = self.client.get(all_url_path)
+        none_count = len(self.POST_COUNT_REGEX.findall(none_response.content))
+        all_count = len(self.POST_COUNT_REGEX.findall(all_response.content))
+        self.assertFalse(
+            all([none_count == 0, all_count == total_posts]),
+            msg="Response from GetPostsByView indicates SQL injection present. %s entries returned for "
+                "match none, and %s entries returned for match all."
+            % (none_count, all_count)
+        )

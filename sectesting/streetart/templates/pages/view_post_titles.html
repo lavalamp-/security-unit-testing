@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}- View Post Titles{% endblock %}
+
+{% block header %}
+View Post Titles
+{% endblock %}
+
+{% block content %}
+    {% for post_title in post_titles %}
+    <div class="row title-row">
+        <div class="col-md-12">
+            <a href="{% url 'view-post' pk=post_title.1 %}"><h2>{{ post_title.0 }}</h2></a>
+            <p>{{ post_title.2 }}</p>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}

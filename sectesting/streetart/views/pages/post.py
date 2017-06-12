@@ -6,10 +6,11 @@ from django.core.exceptions import ValidationError
 from uuid import uuid4
 from django.conf import settings
 from django.urls import reverse_lazy
+from django.db import connection
 
 from ...models import StreetArtPost
 from ...forms import NewStreetArtPostForm, EditStreetArtPostForm
-from .base import BaseListView, BaseDetailView, BaseFormView, BaseUpdateView, BaseDeleteView
+from .base import BaseListView, BaseDetailView, BaseFormView, BaseUpdateView, BaseDeleteView, BaseTemplateView
 from lib import ImageProcessingHelper, InvalidImageFileException, S3Helper
 from streetart.tests import requested_by
 
@@ -135,3 +136,24 @@ class DeletePostView(LoginRequiredMixin, BaseDeleteView):
     template_name = "pages/streetart_post_confirm_delete.html"
     model = StreetArtPost
     success_url = reverse_lazy("post-list")
+
+
+@requested_by("streetart.tests.requestors.pages.GetPostsByTitleViewRequestor")
+class GetPostsByTitleView(BaseTemplateView):
+    """
+    This is the page for retrieving the titles associated with posts based on a title.
+    """
+
+    template_name = "pages/view_post_titles.html"
+
+    def get_context_data(self, **kwargs):
+        to_return = super(GetPostsByTitleView, self).get_context_data(**kwargs)
+        post_title = self.request.GET.get("title", "")
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT title, uuid, description FROM streetart_streetartpost WHERE streetart_streetartpost.title LIKE '%%%s%%';"
+                % post_title
+            )
+            rows = cursor.fetchall()
+        to_return["post_titles"] = rows
+        return to_return

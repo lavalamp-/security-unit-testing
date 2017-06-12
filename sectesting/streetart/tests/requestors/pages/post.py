@@ -99,3 +99,20 @@ class DeletePostViewRequestor(BaseRequestor):
     def get_url_path(self, user="user_1"):
         post = SaFaker.get_post_for_user(user)
         return "/delete-post/%s/" % (post.uuid,)
+
+
+class GetPostsByTitleViewRequestor(BaseRequestor):
+    """
+    This is a requestor class for sending requests to the GetPostsByTitleView view.
+    """
+
+    supported_verbs = ["GET", "OPTIONS", "HEAD"]
+
+    def get_get_data(self, user="user_1"):
+        post = SaFaker.get_post_for_user(user)
+        return {
+            "title": post.title,
+        }
+
+    def get_url_path(self, user="user_1"):
+        return "/get-posts-by-title/"

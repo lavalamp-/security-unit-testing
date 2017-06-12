@@ -14,6 +14,7 @@ from .post import (
     CreatePostViewRequestor,
     EditPostViewRequestor,
     DeletePostViewRequestor,
+    GetPostsByTitleViewRequestor,
     MyPostsListViewRequestor,
     PostDetailViewRequestor,
     PostListViewRequestor,
