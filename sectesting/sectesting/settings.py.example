@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'streetart.middleware.HeaderCleaningMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -48,6 +49,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'streetart.middleware.SecurityHeadersMiddleware',
+    'streetart.middleware.BadHeadersMiddleware',
 ]
 
 ROOT_URLCONF = 'sectesting.urls'
@@ -117,7 +120,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
@@ -139,6 +141,13 @@ AWS_S3_BUCKET = 'streetart-post-images'
 AWS_S3_DEFAULT_ACL = 'private'
 AWS_DEFAULT_REGION = 'us-west-1'
 
+# Headers
+
+DISALLOWED_HEADERS = [
+    "X-Supah-Secret",
+    "X-Supah-Dupah-Secret",
+]
+
 # Unit Testing
 
 TEST_RUNNER = 'streetart.tests.runner.StreetArtTestRunner'
@@ -151,3 +160,20 @@ INCLUDE_CONTENTTYPE_VIEWS_IN_TESTS = False
 TEST_FOR_REQUESTOR_CLASSES = True
 TEST_FOR_DENIAL_OF_SERVICE = True
 TEST_FOR_UNKNOWN_METHODS = True
+TEST_FOR_AUTHENTICATION_ENFORCEMENT = True
+TEST_FOR_RESPONSE_HEADERS = True
+TEST_FOR_OPTIONS_ACCURACY = True
+TEST_FOR_CSRF_ENFORCEMENT = True
+
+EXPECTED_RESPONSE_HEADERS = {
+    "included": {
+        "X-Frame-Options": "deny",
+        "X-XSS-Protection": "1; mode=block",
+        "X-Content-Type-Options": "nosniff",
+        "X-Permitted-Cross-Domain-Policies": "none",
+    },
+    "excluded": [
+        "X-Supah-Secret",
+        "X-Supah-Dupah-Secret",
+    ]
+}
